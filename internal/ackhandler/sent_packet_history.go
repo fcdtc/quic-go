@@ -35,11 +35,12 @@ func (h *sentPacketHistory) GetPacket(p protocol.PacketNumber) *Packet {
 }
 
 // Iterate iterates through all packets.
-// The callback must not modify the history.
 func (h *sentPacketHistory) Iterate(cb func(*Packet) (cont bool, err error)) error {
 	cont := true
-	for el := h.packetList.Front(); cont && el != nil; el = el.Next() {
+	var next *PacketElement
+	for el := h.packetList.Front(); cont && el != nil; el = next {
 		var err error
+		next = el.Next()
 		cont, err = cb(&el.Value)
 		if err != nil {
 			return err
