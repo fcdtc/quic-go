@@ -242,10 +242,10 @@ func (a *updatableAEAD) shouldInitiateKeyUpdate() bool {
 
 func (a *updatableAEAD) KeyPhase() protocol.KeyPhaseBit {
 	if a.shouldInitiateKeyUpdate() {
+		a.rollKeys(time.Now())
 		if a.tracer != nil {
 			a.tracer.UpdatedKey(a.keyPhase, false)
 		}
-		a.rollKeys(time.Now())
 	}
 	return a.keyPhase.Bit()
 }
